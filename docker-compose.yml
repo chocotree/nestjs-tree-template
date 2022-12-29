@@ -1,0 +1,54 @@
+version: '3.9'
+services:
+
+  # 
+  # I decide to run nestjs locally, not in container
+  # 
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: dev
+  #   ports:
+  #     - 3005:3005
+  #   # sync project source code to the container
+  #   volumes:
+  #     - ./src:/app/src
+  #   container_name: trade-game-b
+  #   # with "build" (image name)
+  #   image: trade-game-b
+  #   depends_on:
+  #     - mysql
+
+  mysql:
+    image: mysql:8.0.31
+    # # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # # (this is just an example, not intended to be a production configuration)
+    # command: --default-authentication-plugin=mysql_native_password
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restart: always
+    # 
+    # have to add ports !
+    # otherwise it won't work on local !
+    # make sure to remove volume and restart again !
+    # $ docker volume rm "{project_directory_name}trade-game-db-data"
+    # 
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Taipei
+    volumes:
+      - trade-game-db-data:/var/lib/mysql
+    container_name: trade-game-b-mysql
+
+# where is docker named volume
+# - linux
+# /var/lib/docker/volume
+# 
+# - mac
+# https://stackoverflow.com/a/39763483
+# Please keep in mind, Docker for Mac runs a docker engine in a Linux VM, not your Mac OS,
+# so you can't find the volume's mount point in your Mac OS file system.
+volumes:
+  trade-game-db-data:
