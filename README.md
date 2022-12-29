@@ -3,6 +3,16 @@
 - docker
 - nvm (optional)
 - node version > 16
+- please copy .env
+  ```bash
+  $ cp .env-local-example .env
+  ```
+- please generate the jwt secret key for your env variable
+  ```bash
+  $ node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
+  ```
+  [reference](https://stackoverflow.com/a/52996809)
+- please rename the project in package.json and package-lock.json
 
 ## Installation
 
